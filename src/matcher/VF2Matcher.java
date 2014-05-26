@@ -83,12 +83,19 @@ public class VF2Matcher {
 	// m is a pattern graph node
 	private Boolean checkFeasibility(State s , int n , int m) {
 		
-		Boolean passed = true;
-		Boolean labelDeasibility=s.modelGraph.nodes.get(n).label.equals(s.patternGraph.nodes.get(m).label);
-		passed = passed && checkRpredAndRsucc(s,n,m) &&labelDeasibility; // check Rpred / Rsucc conditions (subgraph isomorphism definition)
-		
-		return passed; // return result
+		return checkSemanticFeasibility(s, n, m)&&checkSyntacticFeasibility(s, n, m); // return result
 	}
+	
+	private Boolean checkSemanticFeasibility(State s, int n, int m){
+		return s.modelGraph.nodes.get(n).label.equals(s.patternGraph.nodes.get(m).label);
+	}
+	
+	private Boolean checkSyntacticFeasibility(State s, int n, int m){
+		Boolean passed = true;
+		passed = passed && checkRpredAndRsucc(s,n,m); // check Rpred / Rsucc conditions (subgraph isomorphism definition)
+		
+		return passed; // return result	
+		}
 	
 	// checks if extending the mapping by the pair (n,m) would violate the subgraph isomorphism definition
 	private Boolean checkRpredAndRsucc(State s , int n , int m) {
