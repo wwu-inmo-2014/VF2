@@ -148,12 +148,23 @@ public class VF2Matcher {
 		T1in2.removeAll(s.modelGraph.getOutgoingVertices(n));
 		HashSet<Integer> T2in2=(HashSet<Integer>) s.T2in.clone();
 		T2in2.removeAll(s.patternGraph.getOutgoingVertices(m));
-		Boolean secoundExp= T1in2.size()>=T2in.size();
+		Boolean secoundExp= T1in2.size()>=T2in2.size();
 		return firstExp && secoundExp;
 		}
 	public Boolean CheckRout(State s, int n, int m){
-		return true;
-		}
+		HashSet<Integer> T1out=(HashSet<Integer>) s.T1out.clone();
+		T1out.removeAll(s.modelGraph.getIngoingVertices(n));
+		HashSet<Integer> T2out=(HashSet<Integer>) s.T2out.clone();
+		T2out.removeAll(s.patternGraph.getIngoingVertices(m));
+		Boolean firstExp= T1out.size()>=T2out.size();
+		
+		HashSet<Integer> T1out2=(HashSet<Integer>) s.T1in.clone();
+		T1out2.removeAll(s.modelGraph.getOutgoingVertices(n));
+		HashSet<Integer> T2out2=(HashSet<Integer>) s.T2in.clone();
+		T2out2.removeAll(s.patternGraph.getOutgoingVertices(m));
+		Boolean secoundExp= T1out2.size()>=T2out2.size();
+		return firstExp && secoundExp;
+	}
 	public Boolean CheckRnew(State s, int n, int m){
 		return true;
 		}
