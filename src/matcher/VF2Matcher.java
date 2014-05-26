@@ -153,20 +153,57 @@ public class VF2Matcher {
 		}
 	public Boolean CheckRout(State s, int n, int m){
 		HashSet<Integer> T1out=(HashSet<Integer>) s.T1out.clone();
-		T1out.removeAll(s.modelGraph.getIngoingVertices(n));
+		T1out.retainAll(s.modelGraph.getIngoingVertices(n));
 		HashSet<Integer> T2out=(HashSet<Integer>) s.T2out.clone();
-		T2out.removeAll(s.patternGraph.getIngoingVertices(m));
+		T2out.retainAll(s.patternGraph.getIngoingVertices(m));
 		Boolean firstExp= T1out.size()>=T2out.size();
 		
 		HashSet<Integer> T1out2=(HashSet<Integer>) s.T1in.clone();
-		T1out2.removeAll(s.modelGraph.getOutgoingVertices(n));
+		T1out2.retainAll(s.modelGraph.getOutgoingVertices(n));
 		HashSet<Integer> T2out2=(HashSet<Integer>) s.T2in.clone();
-		T2out2.removeAll(s.patternGraph.getOutgoingVertices(m));
+		T2out2.retainAll(s.patternGraph.getOutgoingVertices(m));
 		Boolean secoundExp= T1out2.size()>=T2out2.size();
 		return firstExp && secoundExp;
 	}
 	public Boolean CheckRnew(State s, int n, int m){
-		return true;
-		}
+		HashSet<Integer> TNilt1=calcNTilt1(s);
+		TNilt1.retainAll(s.modelGraph.getIngoingVertices(n));
+		HashSet<Integer> TNilt2=calcNTilt2(s);
+		TNilt2.retainAll(s.patternGraph.getIngoingVertices(m));
+		Boolean firstExp= TNilt1.size()>=TNilt2.size();
+		
+		HashSet<Integer> NTilt12=calcNTilt1(s);
+		NTilt12.retainAll(s.modelGraph.getOutgoingVertices(n));
+		HashSet<Integer> NTilt22=calcNTilt2(s);
+		NTilt22.retainAll(s.patternGraph.getOutgoingVertices(m));
+		Boolean secoundExp= NTilt12.size()>=NTilt22.size();
+		return firstExp && secoundExp;		
+	}
+	
+	private HashSet<Integer> calcNTilt1(State s){
+		HashSet<Integer> N1= new HashSet(s.modelGraph.nodes);
+		HashSet<Integer> M1 = new HashSet();
+		for (int node:s.core_1)
+		M1.add(node);
+		HashSet<Integer> T1 = (HashSet<Integer>) s.T1in.clone();
+		T1.retainAll(s.T1out);
+		HashSet<Integer> NTilt1=N1;
+		NTilt1.removeAll(M1);
+		NTilt1.removeAll(T1);
+		return NTilt1;
+	}
+	
+	private HashSet<Integer> calcNTilt2(State s){
+		HashSet<Integer> N2= new HashSet(s.modelGraph.nodes);
+		HashSet<Integer> M2 = new HashSet();
+		for (int node:s.core_2)
+		M2.add(node);
+		HashSet<Integer> T2 = (HashSet<Integer>) s.T2in.clone();
+		T2.retainAll(s.T2out);
+		HashSet<Integer> NTilt2=N2;
+		NTilt2.removeAll(M2);
+		NTilt2.removeAll(T2);
+		return NTilt2;
+	}
 	
 }
