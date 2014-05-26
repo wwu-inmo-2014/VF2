@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 // class representing a graph
 // construct graphs only with the methods provided in this class
@@ -45,6 +46,22 @@ public class Graph {
 	
 	public void addEdge(int sourceId, int targetId) {
 		this.addEdge(this.nodes.get(sourceId), this.nodes.get(targetId));
+	}
+	public HashSet<Integer> getIngoingVertices(int targetId){
+		int[][] matrix=getAdjacencyMatrix();
+		HashSet<Integer> result=new HashSet<Integer>();
+		for (int i=0; i< matrix.length;i++){
+			if (matrix[i][targetId]==1) result.add(i);
+		}
+		return result;
+	}
+	public HashSet<Integer> getOutgoingVertices(int sourceId){
+		int[][] matrix=getAdjacencyMatrix();
+		HashSet<Integer> result=new HashSet<Integer>();
+		for (int i=0; i<matrix.length;i++){
+			if (matrix[sourceId][i]==1) result.add(i);
+		}
+		return result;
 	}
 	
 	// get the adjacency matrix

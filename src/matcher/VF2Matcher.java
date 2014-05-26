@@ -2,6 +2,7 @@ package matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -85,15 +86,16 @@ public class VF2Matcher {
 		
 		return checkSemanticFeasibility(s, n, m)&&checkSyntacticFeasibility(s, n, m); // return result
 	}
-	
+	//checks for semantic feasibility of the pair (n,m)
 	private Boolean checkSemanticFeasibility(State s, int n, int m){
 		return s.modelGraph.nodes.get(n).label.equals(s.patternGraph.nodes.get(m).label);
 	}
 	
+	//checks for syntactic feasibility of the pair (n,m)
 	private Boolean checkSyntacticFeasibility(State s, int n, int m){
 		Boolean passed = true;
 		passed = passed && checkRpredAndRsucc(s,n,m); // check Rpred / Rsucc conditions (subgraph isomorphism definition)
-		
+		passed = passed && CheckRin(s,n,m);
 		return passed; // return result	
 		}
 	
@@ -134,5 +136,26 @@ public class VF2Matcher {
 		
 		return passed; // return the result
 	}
+	
+	public Boolean CheckRin(State s, int n, int m){
+		HashSet<Integer> T1in=(HashSet<Integer>) s.T1in.clone();
+		T1in.removeAll(s.modelGraph.getIngoingVertices(n));
+		HashSet<Integer> T2in=(HashSet<Integer>) s.T2in.clone();
+		T2in.removeAll(s.patternGraph.getIngoingVertices(m));
+		Boolean firstExp= T1in.size()>=T2in.size();
+		
+		HashSet<Integer> T1in2=(HashSet<Integer>) s.T1in.clone();
+		T1in2.removeAll(s.modelGraph.getOutgoingVertices(n));
+		HashSet<Integer> T2in2=(HashSet<Integer>) s.T2in.clone();
+		T2in2.removeAll(s.patternGraph.getOutgoingVertices(m));
+		Boolean secoundExp= T1in2.size()>=T2in.size();
+		return firstExp && secoundExp;
+		}
+	public Boolean CheckRout(State s, int n, int m){
+		return true;
+		}
+	public Boolean CheckRnew(State s, int n, int m){
+		return true;
+		}
 	
 }
