@@ -96,6 +96,8 @@ public class VF2Matcher {
 		Boolean passed = true;
 		passed = passed && checkRpredAndRsucc(s,n,m); // check Rpred / Rsucc conditions (subgraph isomorphism definition)
 		passed = passed && CheckRin(s,n,m);
+		passed = passed && CheckRout(s,n,m);
+		passed = passed && CheckRnew(s,n,m);
 		return passed; // return result	
 		}
 	
